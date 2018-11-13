@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Twitter API</title>
+    <style>
+        .container{
+            width: 1200px;
+            height: 100%;
+            margin: 5% auto;
+            position: relative;
+        }
+        input{
+            width: 40%;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-bottom: 3px solid royalblue;
+            font-size: 16px;
+        }
+        button{
+            background: royalblue;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 2px solid royalblue;
+            outline: none;
+            color: #fff;
+            box-shadow: 0 5px 6px #333;
+            transform: translateY(-4px);
+            transition: .15s ease;
+            cursor: pointer;
+        }
+        button:active{
+            transform: translateY(0px);
+            box-shadow: 0 2px 6px #333
+        }
+        .twits{
+            width: 80%;
+            margin: 2% auto;
+        }
+        .overlay{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: none;
+        }
+        .icon{
+            position: relative;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 50px;
+            height: 50px;
+        }
+        .user-icon{
+            width: 50px;
+            height: 50px;
+            /* float: left; */
+        }
+        article{
+            width: 40%;
+            text-align: left;
+            padding-right: 20%; 
+        }
+        h3{
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="overlay">
+            <img src="static/load.gif" alt="loading..." class="icon">
+        </div>
+        <center>
+            <form action="?" id="form1">
+                <input type="text" name="twit" placeholder="Search for twits...">
+                <button class="search">Search</button>
+            </form>   
+            <div class="twits">
+
+            </div>
+        </center>
+    </main>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function () {
+            $('#form1').submit(() => {
+                $(".overlay").show();
+                $(".twits").html("");
+                const query = $(this).find('input[name="twit"]').val();
+                $.post('/search', { query: query }, function (data) {
+                    $(".overlay").hide();
+                    // console.log(data);
+                    for(var i in data.statuses){
+                        $(".twits").append("<div><h3><img src='"+data.statuses[i].user.profile_image_url+"' alt='"+data.statuses[i].user.name+"' class='user-icon'> @"+data.statuses[i].user.name+"</h3><article>"+data.statuses[i].text+"<p>"+data.statuses[i].user.location+"</p></article></div>");
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>
