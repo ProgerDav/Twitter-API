@@ -94,10 +94,11 @@
                 $(".twits").html("");
                 const query = $(this).find('input[name="twit"]').val();
                 $.post('/search', { query: query }, function (data) {
+                    console.log(data);
                     $(".overlay").hide();
                     // console.log(data);
                     for(var i in data.statuses){
-                        $(".twits").append("<div><h3><img src='"+data.statuses[i].user.profile_image_url+"' alt='"+data.statuses[i].user.name+"' class='user-icon'> @"+data.statuses[i].user.name+"</h3><article>"+data.statuses[i].text+"<p>"+data.statuses[i].user.location+"</p></article></div>");
+                        $(".twits").append("<div><h3><a href='https://twitter.com/"+data.statuses[i].user.screen_name+"' target='_blank'><img src='"+data.statuses[i].user.profile_image_url+"' alt='"+data.statuses[i].user.name+"' class='user-icon'></a> @"+data.statuses[i].user.name+"</h3><article>"+data.statuses[i].text+"<p>"+data.statuses[i].user.location+"</p></article></div>");
                     }
                 });
                 return false;
