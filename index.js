@@ -22,11 +22,17 @@ app.get('/', (req, res) => {
     res.render('index', {});
 });
 
+app.post("/loc", (req, res) => {
+    const loc = req.body.loc;
+    twit_search.location(loc, (data) => {
+        res.json(data);
+    });
+})
+
 app.post("/search", (req, res) => {
     const query = req.body.query;
     console.log(query);
     twit_search.search(query, (data) => {
-        console.log(data);
         res.json(data);
     });
 })

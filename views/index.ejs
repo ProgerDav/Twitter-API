@@ -72,7 +72,21 @@
     </style>
 </head>
 <body>
-    <main class="container">
+    <main class="container c2">
+        <div class="overlay">
+            <img src="static/load.gif" alt="loading..." class="icon">
+        </div>
+        <center>
+            <form action="?" id="loc_form">
+                <input type="text" name="loc" placeholder="Search location...">
+                <button class="search">Search</button>
+            </form>   
+            <div class="loc">
+
+            </div>
+        </center>
+    </main>
+    <main class="container c1">
         <div class="overlay">
             <img src="static/load.gif" alt="loading..." class="icon">
         </div>
@@ -89,16 +103,36 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script>
         $(function () {
+
             $('#form1').submit(() => {
-                $(".overlay").show();
+                $(".c1").find(".overlay").show();
                 $(".twits").html("");
                 const query = $(this).find('input[name="twit"]').val();
                 $.post('/search', { query: query }, function (data) {
                     console.log(data);
-                    $(".overlay").hide();
+                    $(".c1").find(".overlay").hide();
                     // console.log(data);
                     for(var i in data.statuses){
                         $(".twits").append("<div><h3><a href='https://twitter.com/"+data.statuses[i].user.screen_name+"' target='_blank'><img src='"+data.statuses[i].user.profile_image_url+"' alt='"+data.statuses[i].user.name+"' class='user-icon'></a> @"+data.statuses[i].user.name+"</h3><article>"+data.statuses[i].text+"<p>"+data.statuses[i].user.location+"</p></article></div>");
+                    }
+                });
+                return false;
+            });
+
+            $('#loc_form').submit(() => {
+                $(".c2").find(".overlay").show();
+                $(".loc").html("");
+                const loc = $(this).find('input[name="loc"]').val();
+                $.post("/loc", {loc: loc}, function(data){
+                    console.log(data);
+                    $(".c2").find(".overlay").hide();
+                    if(data.result.places.length == 0){
+                        $(".loc").html("No matches were found...");
+                        return;
+                    }
+                    for(let l in data.result.places){
+                        let row = data.result.places[l];
+                        $(".loc").append("<h4>"+row.country+" - "+row.id+" ("+row.name+")</h4>");
                     }
                 });
                 return false;

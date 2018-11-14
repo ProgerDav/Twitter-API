@@ -23,5 +23,14 @@ module.exports = {
             }
             callback(data);
         });
+    },
+    location: function(loc, callback){
+        T.get('https://api.twitter.com/1.1/geo/search.json?query='+loc, function(err, data, response){
+            if(err){
+                console.log(err);
+                return;
+            }
+            callback(data);
+        });
     }
 }
